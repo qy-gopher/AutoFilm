@@ -11,6 +11,7 @@ from app.core import settings, logger
 from app.extensions import LOGO
 from app.modules import Alist2Strm, Ani2Alist
 
+
 def print_logo() -> None:
     """
     打印 Logo
