@@ -22,7 +22,7 @@ def print_logo() -> None:
     print("")
 
 
-if __name__ == "__main__":
+async def main():
     print_logo()
 
     logger.info(f"AutoFilm {settings.APP_VERSION} 启动中...")
@@ -31,15 +31,20 @@ if __name__ == "__main__":
     if settings.AlistServerList:
         logger.info("检测到 Alist2Strm 模块配置，正在添加至后台任务")
         for server in settings.AlistServerList:
-            Alist2Strm(**server).run()
+            await Alist2Strm(**server).run()
     else:
         logger.warning("未检测到 Alist2Strm 模块配置")
 
     if settings.Ani2AlistList:
         logger.info("检测到 Ani2Alist 模块配置，正在添加至后台任务")
         for server in settings.Ani2AlistList:
-            Ani2Alist(**server).run()
+            # 如果 Ani2Alist.run() 也是异步的，这里也需要加 await
+            await Ani2Alist(**server).run()
     else:
         logger.warning("未检测到 Ani2Alist 模块配置")
 
     logger.info("AutoFilm 执行完成")
+
+if __name__ == "__main__":
+    loop = get_event_loop()
+    loop.run_until_complete(main())
